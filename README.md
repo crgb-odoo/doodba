@@ -6,37 +6,37 @@
 [![](https://images.microbadger.com/badges/commit/tecnativa/doodba:latest.svg)](https://microbadger.com/images/tecnativa/doodba:latest "Get your own commit badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/tecnativa/doodba.svg)](https://microbadger.com/images/tecnativa/doodba "Get your own license badge on microbadger.com")
 
-**Doodba** stands for **Do**cker **Od**oo **Ba**se, and it is a highly opinionated image
-ready to put [Odoo](https://www.odoo.com) inside it, but **without Odoo**.
+**Doodba** es un acronimo de **Do**cker **Od**oo **Ba**se, y es una imagen con gran opcionalidad
+lista para desplegar [Odoo](https://www.odoo.com) dentro de ella, pero **sin Odoo**.
 
-## What?
+## ¿Qué?
 
-Yes, the purpose of this is to serve as a base for you to build your own Odoo project,
-because most of them end up requiring a big amount of custom patches, merges,
-repositories, etc. With this image, you have a collection of good practices and tools to
-enable your team to have a standard Odoo project structure.
+Si, el proposito de esto es servir como base para contruir tu propio proyecto de Odoo,
+porque la mayoria de ellos terminan requiriendo una gran cantidad de parches personalizados, fusiones(merges),
+repositorios, etc. Con esta imagen, tienes una coleccion de buenas practicas y herramientas para
+habilitar a tu equipo a tener una estructura estandar de Odoo.
 
-BTW, we use [Debian][]. I hope you like that.
+por cierto, utilizamos [Debian][]. Espero sea esto de tu agrado.
 
 [debian]: https://debian.org/
 
-## Why?
+## ¿Porque?
 
-Because developing Odoo is hard. You need lots of customizations, dependencies, and if
-you want to move from one version to another, it's a pain.
+Porque desarrollar en Odoo es dificil. Se necesitan muchas personalizaciones y dependencias y si
+quieres migrar de una version a otra, es un dolor de cabeza.
 
-Also because nobody wants Odoo as it comes from upstream, you most likely will need to
-add custom patches and addons, at least, so we need a way to put all together and make
-it work anywhere quickly.
+Tambien porque nadie quiere Odoo como viene de origen, lo mas seguro es que tendras que
+añadir personlizaciones y complementos (addons), como minimo, asi que se necesita una forma de poner todo junto y
+hacer que funcione donde sea, rapidamente.
 
-## How?
+## ¿Como?
 
-You can start working with this straight away with our [template][].
+Puedes empezar a trabajar directamente con nuestra plantilla: [template][].
 
 <!-- toc -->
 
 - [Image usage](#image-usage)
-  - [`/opt/odoo/custom`: The important one](#optodoocustom-the-important-one)
+  - [`/opt/odoo/custom`: La importante](#optodoocustom-the-important-one)
     - [`/opt/odoo/custom/entrypoint.d`](#optodoocustomentrypointd)
     - [`/opt/odoo/custom/build.d`](#optodoocustombuildd)
     - [`/opt/odoo/custom/conf.d`](#optodoocustomconfd)
@@ -45,17 +45,17 @@ You can start working with this straight away with our [template][].
       - [`/opt/odoo/custom/src/odoo`](#optodoocustomsrcodoo)
       - [`/opt/odoo/custom/src/private`](#optodoocustomsrcprivate)
       - [`/opt/odoo/custom/src/repos.yaml`](#optodoocustomsrcreposyaml)
-        - [Automatic download of repos](#automatic-download-of-repos)
+        - [Descarga automatica de repositorios](#automatic-download-of-repos)
       - [`/opt/odoo/custom/src/addons.yaml`](#optodoocustomsrcaddonsyaml)
       - [`/opt/odoo/custom/dependencies/*.txt`](#optodoocustomdependenciestxt)
-  - [`/opt/odoo/common`: The useful one](#optodoocommon-the-useful-one)
-  - [`/opt/odoo/auto`: The automatic one](#optodooauto-the-automatic-one)
+  - [`/opt/odoo/common`: La útil](#optodoocommon-the-useful-one)
+  - [`/opt/odoo/auto`: La automatica](#optodooauto-the-automatic-one)
     - [`/opt/odoo/auto/addons`](#optodooautoaddons)
     - [`/opt/odoo/auto/odoo.conf`](#optodooautoodooconf)
-- [The `Dockerfile`](#the-dockerfile)
-- [Bundled tools](#bundled-tools)
+- [El `Dockerfile`](#the-dockerfile)
+- [Herramientas incluidas](#bundled-tools)
   - [`addons`](#addons)
-  - [`click-odoo` and related scripts](#click-odoo-and-related-scripts)
+  - [`click-odoo` y scripts relacionados](#click-odoo-and-related-scripts)
   - [`nano`](#nano)
   - [`log`](#log)
   - [`pot`](#pot)
@@ -65,23 +65,23 @@ You can start working with this straight away with our [template][].
   - [`pudb`](#pudb)
   - [`git-aggregator`](#git-aggregator)
   - [`autoaggregate`](#autoaggregate)
-    - [Example `repos.yaml` file](#example-reposyaml-file)
+    - [Ejemplo `repos.yaml` file](#example-reposyaml-file)
   - [`odoo`](#odoo)
-- [Subproject template](#subproject-template)
-- [FAQ](#faq)
-  - [Will there be not retrocompatible changes on the image?](#will-there-be-not-retrocompatible-changes-on-the-image)
-  - [This project is too opinionated, but can I question any of those opinions?](#this-project-is-too-opinionated-but-can-i-question-any-of-those-opinions)
-  - [What's this `hooks` folder here?](#whats-this-hooks-folder-here)
-  - [How can I pin an image version?](#how-can-i-pin-an-image-version)
-  - [How can I help?](#how-can-i-help)
-- [Related Projects](#related-projects)
+- [Plantilla de subproyecto](#subproject-template)
+- [Preguntas Frecuentes](#faq)
+  - [¿habrá cambios retrocompatibles en la imagen?](#will-there-be-not-retrocompatible-changes-on-the-image)
+  - [Este proyecto tiene muchas opciones, ¿puedo cuestionar alguna de esas opciones?](#this-project-is-too-opinionated-but-can-i-question-any-of-those-opinions)
+  - [¿Qué es la carpeta `hooks`?](#whats-this-hooks-folder-here)
+  - [¿Cómo puedo fijar una imagen de una versión?](#how-can-i-pin-an-image-version)
+  - [¿Como puedo ayudar?](#how-can-i-help)
+- [Proyectos relacionados](#related-projects)
 
 <!-- tocstop -->
 
-## Image usage
+## Uso de la Imagen
 
-Basically, every directory you have to worry about is found inside `/opt/odoo`. This is
-its structure:
+Basicamente, cada directorio que vayas a necesitar se encuentra dentro de `/opt/odoo`. Esta es
+la estructura:
 
     custom/
         entrypoint.d/
@@ -113,37 +113,37 @@ its structure:
         addons/
         odoo.conf
 
-Let's go one by one.
+Veamoslos uno a uno
 
-### `/opt/odoo/custom`: The important one
+### `/opt/odoo/custom`: El importante
 
-Here you will put everything related to your project.
+Aqui pondras todo lo relacionado con tu proyecto.
 
 #### `/opt/odoo/custom/entrypoint.d`
 
-Any executables found here will be run when you launch your container, before running
-the command you ask.
+Cualquier ejecutable que se encuentre aqui se ejecutara cuando inicies tu contenedor, antes de ejecutar
+el comando que pidas.
 
 #### `/opt/odoo/custom/build.d`
 
-Executables here will be aggregated with those in `/opt/odoo/common/build.d`.
+Ejecutables que esten aqui se agregaran a aquellos en `/opt/odoo/common/build.d`.
 
-The resulting set of executables will then be sorted alphabetically (ascending) and then
-subsequently run.
+El conjunto resultante de ejecutables sera ordenado alfabeticamente (ascendente) y 
+subsecuentemente ejecutado.
 
 #### `/opt/odoo/custom/conf.d`
 
-Files here will be environment-variable-expanded and concatenated in
-`/opt/odoo/auto/odoo.conf` in the entrypoint.
+Los ficheros de aqui expandiran las variable de entorno y se concatenaran en
+`/opt/odoo/auto/odoo.conf` a la entrada.
 
 #### `/opt/odoo/custom/ssh`
 
-It must follow the same structure as a standard `~/.ssh` directory, including `config`
-and `known_hosts` files. In fact, it is completely equivalent to `~root/.ssh`.
+debe seguir la misma estructura del directorio estandar `~/.ssh`, incluidos los ficheros `config`
+y `known_hosts`. De hecho, es completamente equivalente a `~root/.ssh`.
 
-The `config` file can contain `IdentityFile` keys to represent the private key that
-should be used for that host. Unless specified otherwise, this defaults to
-`identity[.pub]`, `id_rsa[.pub]` or `id_dsa[.pub]` files found in this same directory.
+El fichero `config` puede contener claves `IdentityFile` para representar las claves privadas que
+deben utilizarse para ese servidor(host). A menos que sea especificado de otra manera, los ficheros
+`identity[.pub]`, `id_rsa[.pub]` o `id_dsa[.pub]` seran los predeterminados encontrados en este mismo directorio.
 
 This is very useful **to use deployment keys** that grant git access to your private
 repositories.
